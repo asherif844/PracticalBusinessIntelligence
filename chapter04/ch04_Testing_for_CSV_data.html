@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="d3.js" charset="utf-8"></script> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Python Server</title>
+</head>
+
+
+<body>
+<p>The Python Server is Running!</p>
+
+
+    <script>
+        d3.csv("DiscountCodebyWeek.csv", function (data) {
+              discountData =  data.map(function (d) {
+                 return +d.DiscountCode ;
+                 });
+			        weekData =  data.map(function (d) {
+				return +d.WeekInYear ;
+				 });
+		console.log(discountData);
+		console.log(weekData);
+    console.log(data); 	
+    });
+
+    </script>
+
+
+</body>
+</html>
+
+
