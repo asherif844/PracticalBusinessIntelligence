@@ -1,0 +1,63 @@
+---
+title: "Forecast for Discount Codes"
+author: "Practical BI Developer"
+date: "August 3, 2016"
+output: html_document
+---
+
+![](http://www.packtpub.com/sites/default/files/packt_logo.png)
+
+# Results
+###### Libraries used are RODBC, plotly, and forecast
+```{r echo = FALSE, results='hide',message=FALSE}
+# We will not see the actual libraries loaded 
+# as it is not necessary for the end user
+library('RODBC')
+library('plotly')
+library('forecast')
+```
+###### Connectivity to Data Source is through ODBC
+```{r echo = FALSE, results = 'hide', message = FALSE}
+connection_SQLBI<-odbcConnect("SQLBI")
+
+#Get Connection Details 
+connection_SQLBI
+
+##query fetching begin##
+SQL_Query_1<-sqlQuery(connection_SQLBI,
+        'SELECT ["WeekInYear"]
+        ,["DiscountCode"]
+        FROM [AdventureWorks2014].[dbo].[DiscountCodebyWeek]' )
+##query fetching end##
+
+#begin table manipulation
+colnames(SQL_Query_1)<- c("Week", "Discount")
+SQL_Query_1$Weeks <- as.numeric(SQL_Query_1$Week)
+SQL_Query_1<-SQL_Query_1[,-1] #removes first column
+SQL_Query_1<-SQL_Query_1[c(2,1)] #reverses columns 1 and 2
+#end table manipulation
+```
+### Preview of First 6 rows of data
+```{r echo = FALSE, message= FALSE}
+head(SQL_Query_1)
+```
+### Summary of Table Observations
+```{r echo = FALSE, message= FALSE}
+str(SQL_Query_1)
+```
+### Time Series and Forecast Plots
+```{r echo = FALSE, message= FALSE}
+Query1_TS<-ts(SQL_Query_1$Discount)
+
+par(mfrow=c(3,1))
+plot.ts(Query1_TS, xlab = 'Week (1-52)', ylab = 'Discount', main = 'Time Series of Discount Code by Week')
+
+discountforecasts <- HoltWinters(Query1_TS, beta=FALSE, gamma=FALSE)
+plot(discountforecasts)
+
+discountforecasts_8periods <- forecast.HoltWinters(discountforecasts, h=8)
+plot.forecast(discountforecasts_8periods, ylab='Discount', xlab = 'Weeks (1-60)', main = 'Forecasting 8 periods')
+```
+
+
+

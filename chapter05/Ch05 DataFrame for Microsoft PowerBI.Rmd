@@ -1,0 +1,23 @@
+library('RODBC')
+connection_SQLBI<-odbcConnect("SQLBI")
+
+SQL_Query_1<-sqlQuery(connection_SQLBI,
+                      'SELECT [WeekInYear]
+                      ,[DiscountCode]
+                      FROM [AdventureWorks2014].[dbo].[DiscountCodebyWeek]' )
+
+attach(SQL_Query_1)
+
+##Change Column Names##
+colnames(SQL_Query_1)<- c("Week", "Discount")
+
+SQL_Query_1$Weeks <- as.numeric(SQL_Query_1$Week)
+SQL_Query_1<-SQL_Query_1[c(1,3,2)] #reverses columns 1 and 2
+
+attach(SQL_Query_1)
+linear_regression<-lm(Discount~Weeks, SQL_Query_1)
+
+Regression_Dataframe<-cbind(SQL_Query_1, Fitted=fitted(linear_regression))
+head(Regression_Dataframe)
+
+
