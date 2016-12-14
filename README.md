@@ -6,6 +6,7 @@ I have posted all SQL, R, Python, and D3.js code used in the book by Chapter.
 https://www.packtpub.com/big-data-and-business-intelligence/practical-business-intelligence
 
 What this book covers
+
 Chapter 1, Introduction to Practical Business Intelligence, serves as the overall introduction to the book and gives a high-level understanding of what business intelligence is, the intended audience of this book, and a summary of the different technologies that will be used.
 
 Chapter 2, Web Scraping, focuses on data extraction from the Web using web scraping libraries from both R and Python. We will also focus on importing data into our data warehouse with MS SQL Server.
